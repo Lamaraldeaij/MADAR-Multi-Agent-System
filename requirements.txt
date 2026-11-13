@@ -1,0 +1,6 @@
+langsmith
+pandas
+gradio
+fastapi
+uvicorn
+pydantic>=2,<3
