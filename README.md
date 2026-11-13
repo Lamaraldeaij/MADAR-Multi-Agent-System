@@ -20,3 +20,25 @@ To set up the MADAR project, follow these steps:
 6. Run the notebook setup cells to prepare the Python environment and start the backend server for the interactive dashboard.
 
 Once the setup is complete, the system is ready to run. The next section explains how to launch the dashboard and use its features.
+
+## Running the System
+
+After completing the setup and opening the MADAR dashboard, follow these steps:
+
+1. Select one of the available scenarios from the Quick Scenarios section, or customize the simulation settings.
+2. Adjust the satellite battery levels, battery drain, communication status, and mission priorities as needed.
+3. Click the **Run Simulation** button to start the simulation.
+4. Monitor the simulation through the dashboard, where you can view satellite status, mission progress, agent activities, and communication messages.
+5. Use the timeline controls to play, pause, move between simulation steps, and review important events.
+6. Review the performance metrics and event logs to understand the system's results.
+
+## Additional Instructions
+
+- The system supports up to 5 missions per simulation.
+- Battery levels must be between 0% and 100%.
+- The battery threshold can be adjusted between 30% and 80%.
+- At least 3 missions are required to test scheduling conflicts.
+- The dashboard supports different scenarios, including Normal, Battery Drain, Link Loss, Conflict, Stress Test, and Total Blackout.
+- Do not upload the LangSmith API key or other sensitive credentials to the public GitHub repository.
+- The `MADAR.html` file can also run independently using its built-in simulation logic, but standalone runs are not traced in LangSmith.
+
