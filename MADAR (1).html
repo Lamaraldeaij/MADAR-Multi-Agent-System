@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MADAR | مدار</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Tajawal:wght@800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070a22;--bg2:#1d1550;--card:rgba(255,255,255,.045);--line:rgba(255,255,255,.11);--tx:#eef0ff;--mu:#9ea3d2;--gold:#f2b84b;--teal:#3fe0c5;--coral:#ff6f7d;--vio:#9b8cff;--pink:#ff9bd0;--soft:rgba(255,255,255,.03);--dim:rgba(255,255,255,.12);--thbg:#0d1035;--nodebg:#0d1035;--helptx:#cfd3f5;--h1a:#fff;color-scheme:dark}
+:root[data-theme=light]{--bg:#f5f2fc;--bg2:#e2daff;--card:rgba(255,255,255,.72);--line:rgba(40,30,100,.14);--tx:#1a1640;--mu:#5b5a86;--gold:#b47600;--teal:#00806e;--coral:#c4303f;--vio:#5a46d6;--pink:#c2408a;--soft:rgba(40,30,100,.04);--dim:rgba(40,30,100,.13);--thbg:#f1edfb;--nodebg:#ffffff;--helptx:#2c2860;--h1a:#1a1640;color-scheme:light}
+.theme{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--card);font-size:17px;flex:none}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;color:var(--tx);font:400 14px/1.5 'Sora',system-ui,sans-serif;background:radial-gradient(1100px 600px at 85% -15%,var(--bg2),transparent),radial-gradient(700px 500px at -10% 55%,rgba(242,184,75,.07),transparent),var(--bg);overflow-x:hidden}
+#sky{position:fixed;inset:0;z-index:-1;pointer-events:none}
+.wrap{max-width:1280px;margin:0 auto;padding:22px 16px 48px}
+button{font:inherit;cursor:pointer;color:inherit}
+button:focus-visible,input:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+
+/* Header */
+header{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-bottom:22px}
+.logo{width:58px;height:58px;border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--gold),#c0541f 60%,#4b1d6b);position:relative;flex:none;box-shadow:0 0 40px rgba(242,184,75,.35)}
+.logo:before{content:"";position:absolute;inset:-9px;border:2px solid var(--teal);border-radius:50%;border-left-color:transparent;border-bottom-color:transparent;animation:spin 6s linear infinite}
+.logo:after{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:#fff;top:-6px;left:50%;box-shadow:0 0 10px #fff;transform-origin:0 35px;animation:spin 3.5s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+h1{margin:0;font:800 36px/1 'Sora';letter-spacing:.04em;background:linear-gradient(90deg,var(--h1a),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+h1 span{font:800 32px 'Tajawal';margin-inline-start:12px;-webkit-text-fill-color:var(--gold)}
+header p{margin:6px 0 0;color:var(--mu);max-width:640px}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-inline-start:auto}
+.chip{font-size:11px;padding:4px 10px;border-radius:99px;border:1px solid var(--line);color:var(--mu)}
+.chip.ls:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-inline-end:6px;vertical-align:1px}
+.chip.ls.on{color:var(--teal);border-color:var(--teal)}.chip.ls.warn{color:var(--gold);border-color:var(--gold)}
+
+.grid{display:grid;grid-template-columns:350px minmax(0,1fr);gap:18px}
+@media(max-width:960px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px;backdrop-filter:blur(10px)}
+.card h3{margin:0 0 12px;font:700 13px 'Sora';letter-spacing:.12em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:8px}
+.card h3 small{font-weight:400;letter-spacing:0;text-transform:none;color:var(--mu);margin-inline-start:auto}
+
+/* Controls */
+aside{display:grid;gap:14px;align-content:start}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.preset{padding:6px 11px;border-radius:99px;border:1px solid var(--line);background:transparent;font-size:12px;transition:.2s}
+.preset:hover{border-color:var(--gold)}
+.preset.on{background:var(--gold);color:#1b1448;border-color:var(--gold);font-weight:700}
+.satin{border:1px solid var(--line);border-radius:16px;padding:12px;margin-bottom:10px;background:var(--soft)}
+.satin header{margin:0 0 4px;gap:10px}
+.satin header b{font-size:15px}
+.batt{width:46px;height:20px;border:2px solid var(--mu);border-radius:5px;position:relative;margin-inline-start:auto}
+.batt:after{content:"";position:absolute;right:-6px;top:4px;width:3px;height:8px;background:var(--mu);border-radius:0 2px 2px 0}
+.batt i{position:absolute;left:2px;top:2px;bottom:2px;border-radius:2px;transition:width .25s,background .25s}
+.row{margin-top:10px}
+.lab{display:flex;align-items:center;gap:6px;color:var(--mu);font-size:13px}
+.lab output{margin-inline-start:auto;color:var(--tx);font-weight:700;font-family:'JetBrains Mono',monospace}
+.info{width:18px;height:18px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--mu);font-size:10px;font-weight:700;padding:0;line-height:16px;flex:none}
+.info.on{background:var(--teal);color:#07121a;border-color:var(--teal)}
+.help{display:none;margin:6px 0 2px;padding:8px 10px;border-radius:10px;background:rgba(63,224,197,.08);border-inline-start:3px solid var(--teal);font-size:12px;color:var(--helptx)}
+.help.show{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:0;transform:translateY(-4px)}}
+input[type=range]{width:100%;accent-color:var(--gold);margin:6px 0 0}
+.seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:6px}
+.seg button{flex:1;padding:6px 2px;background:transparent;border:0;color:var(--mu);font-size:11px;transition:.2s}
+.seg button+button{border-inline-start:1px solid var(--line)}
+.seg button.on{background:rgba(63,224,197,.2);color:var(--tx);font-weight:700}
+.seg button.on.bad{background:rgba(255,111,125,.22)}
+.pris{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.pri{padding:6px 10px;border-radius:10px;border:1px solid var(--line);background:transparent;font-size:12px;min-width:86px;text-align:start}
+.pri small{display:block;color:var(--mu);font-size:10px}
+.pri[data-p=High]{border-color:var(--coral);background:rgba(255,111,125,.1)}
+.pri[data-p=Medium]{border-color:var(--gold);background:rgba(242,184,75,.1)}
+.pri[data-p=Low]{border-color:var(--teal);background:rgba(63,224,197,.08)}
+.run{width:100%;padding:14px;border:0;border-radius:16px;font:800 16px 'Sora';color:#1b1448;background:linear-gradient(90deg,var(--gold),#ff9d5c,var(--gold));background-size:200% 100%;animation:shine 4s linear infinite;box-shadow:0 8px 30px rgba(242,184,75,.25);transition:transform .15s}
+.run:hover{transform:translateY(-2px)}.run:active{transform:scale(.98)}
+@keyframes shine{to{background-position:200% 0}}
+.hint{font-size:11px;color:var(--mu);margin:8px 0 0;text-align:center}
+
+/* Main */
+.main{display:grid;gap:18px;min-width:0}
+.stage{display:grid;grid-template-columns:minmax(280px,440px) 1fr;gap:18px}
+@media(max-width:780px){.stage{grid-template-columns:1fr}}
+.orbw{position:relative;border-radius:16px;background:radial-gradient(circle at 50% 50%,rgba(42,111,214,.18),transparent 65%)}
+:root[data-theme=light] .orbw{background:radial-gradient(circle at 50% 50%,#1d2a6e,#0b0f2a 75%)}
+#orb{width:100%;display:block;cursor:pointer}
+#orb .satg{cursor:pointer}
+.flow{animation:dash 1s linear infinite}.flow.fast{animation-duration:.35s}
+@keyframes dash{to{stroke-dashoffset:-24}}
+.pulse{animation:pl 1.3s ease-out forwards;transform-box:fill-box;transform-origin:center}
+@keyframes pl{from{transform:scale(.3);opacity:1}to{transform:scale(3);opacity:0}}
+#sinfo{color:#eef0ff;position:absolute;left:10px;bottom:10px;padding:10px 12px;border-radius:12px;background:rgba(7,10,34,.88);border:1px solid var(--line);font-size:12px;display:none;min-width:180px}
+#sinfo b{color:var(--gold)}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:var(--mu);margin-top:6px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-inline-end:5px;vertical-align:-1px}
+.side{display:grid;gap:12px;align-content:start}
+.kp{display:grid;grid-template-columns:auto 1fr 1fr;gap:10px;align-items:stretch}
+.ring{grid-row:span 2;display:grid;place-items:center;padding:8px 14px;border-radius:16px;border:1px solid var(--line);background:var(--soft)}
+.ring svg{width:110px;height:110px}
+.k{padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--soft)}
+.k b{display:block;font:800 26px 'Sora';line-height:1.1;transition:color .3s}
+.k span{color:var(--mu);font-size:12px}
+.bump{animation:bump .5s}
+@keyframes bump{40%{transform:scale(1.25);color:var(--gold)}}
+.verdict{padding:14px;border-radius:14px;border:1px solid var(--line);color:var(--mu);font-size:13px}
+.verdict b{color:var(--tx);font-size:15px}
+.verdict.pass{border-color:var(--teal);background:rgba(63,224,197,.1)}
+.verdict.fail{border-color:var(--coral);background:rgba(255,111,125,.1)}
+.now{font-size:13px;padding:10px 12px;border-radius:12px;background:rgba(155,140,255,.1);border:1px solid rgba(155,140,255,.25)}
+.now small{display:block;color:var(--mu);font-size:11px;text-transform:uppercase;letter-spacing:.1em}
+.tl{display:grid;gap:4px}
+.ctrl{display:flex;align-items:center;gap:8px}
+.ctrl>button{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--soft);font-size:15px;flex:none}
+.ctrl>button#pp{background:var(--gold);color:#1b1448;border:0}
+.ctrl .seg{margin:0 0 0 auto;width:150px}
+.track{position:relative;height:16px;margin:4px 9px 0}
+.mk{position:absolute;top:3px;width:10px;height:10px;border-radius:50%;transform:translateX(-50%);border:0;padding:0;box-shadow:0 0 8px currentColor}
+#sl{width:100%;margin:0}
+
+/* Network */
+#net{width:100%;display:block}
+.ticker{display:grid;gap:4px;margin-top:6px;font:12px 'JetBrains Mono',monospace;color:var(--mu)}
+.ticker div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ticker div:first-child{color:var(--tx)}
+
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:960px){.two{grid-template-columns:1fr}}
+.sc-x{overflow:auto;max-height:320px}
+.mis{display:grid;gap:8px}
+.mi{display:grid;grid-template-columns:62px 1fr auto;gap:10px;align-items:center;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--soft)}
+.mi b{font-family:'JetBrains Mono',monospace}
+.pipe{display:flex;align-items:center;gap:0}
+.pipe span{width:12px;height:12px;border-radius:50%;background:var(--dim);flex:none;transition:.3s}
+.pipe em{flex:1;height:2px;background:var(--dim);transition:.3s}
+.pipe .lit{background:var(--teal);box-shadow:0 0 8px var(--teal)}
+.pipe em.lit{box-shadow:none}
+.mi .lbls{display:flex;justify-content:space-between;font-size:10px;color:var(--mu);margin-top:4px}
+.pill{padding:2px 9px;border-radius:99px;font-size:11px;font-weight:700;background:var(--dim);white-space:nowrap}
+.p-Completed,.p-ACCEPT_PROPOSAL,.p-PROPOSE{color:var(--teal)}.p-Assigned,.p-INFORM{color:var(--vio)}.p-In.Progress,.p-CFP,.p-REQUEST{color:var(--gold)}.p-Reassigned{color:var(--pink)}.p-REFUSE,.p-REJECT_PROPOSAL,.p-Pending{color:var(--coral)}
+.pr-High{color:var(--coral)}.pr-Medium{color:var(--gold)}.pr-Low{color:var(--teal)}
+pre{margin:0;white-space:pre-wrap;font:12px/1.7 'JetBrains Mono',monospace;color:var(--mu)}
+pre .bad{color:var(--coral)}pre .good{color:var(--teal)}pre .stp{color:var(--vio)}
+.filt{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.filt button{padding:4px 10px;border-radius:99px;border:1px solid var(--line);background:transparent;font-size:11px;font-weight:700}
+.filt button.on{background:var(--dim);border-color:var(--tx)}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:start;color:var(--mu);font-weight:600;padding:6px;position:sticky;top:0;background:var(--thbg)}
+td{padding:6px;border-top:1px solid var(--line);vertical-align:top}
+td.c{word-break:break-all;color:var(--mu);font-family:'JetBrains Mono',monospace;font-size:11px}
+tr.new td{animation:hl 1.2s}
+@keyframes hl{from{background:rgba(242,184,75,.18)}}
+kbd{font:11px 'JetBrains Mono',monospace;padding:1px 5px;border:1px solid var(--line);border-radius:4px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="sky" aria-hidden="true"></canvas>
+<div class="wrap">
+<header>
+  <div class="logo" aria-hidden="true"></div>
+  <div><h1>MADAR<span>مدار</span></h1>
+  <p>Multi-agent Earth observation coordination. Six agents negotiate which satellite images the target, and recover on their own when batteries drain or links drop.</p></div>
+  <div class="chips"><span class="chip ls" id="ls">LangSmith: checking…</span><span class="chip">6 agents</span><span class="chip">Contract-Net protocol</span><span class="chip">Live replay</span></div>
+  <button class="theme" id="theme" aria-label="Switch light or dark theme" title="Light / dark">☀️</button>
+</header>
+
+<div class="grid">
+<aside>
+  <div class="card">
+    <h3>Quick scenarios <small>Loads inputs only</small></h3>
+    <div class="presets" id="presets"></div>
+    <p class="hint">Faults are never forced: the agents detect them from the inputs.</p>
+  </div>
+
+  <div class="card">
+    <h3>Satellites <small>Tap <b>i</b> to learn each input</small></h3>
+    <div id="satins"></div>
+  </div>
+
+  <div class="card">
+    <h3>Rules &amp; missions</h3>
+    <div class="row">
+      <div class="lab">Battery threshold <button class="info" data-h="h-th" aria-label="About battery threshold">i</button><output id="o-th"></output></div>
+      <p class="help" id="h-th">The minimum charge a satellite needs to accept or keep a mission. The Battery Agent watches every satellite; once one falls below this line it raises a LOW_BATTERY alert and the Coordinator moves its mission to another satellite. A higher threshold makes the system more cautious, so faults trigger sooner. (Satellites also have a built-in hard minimum of 30%.)</p>
+      <input type="range" id="th" min="30" max="80" step="5">
+    </div>
+    <div class="row">
+      <div class="lab">Number of missions <button class="info" data-h="h-mc" aria-label="About missions">i</button><output id="o-mc"></output></div>
+      <p class="help" id="h-mc">How many observation requests the Mission Agent receives (all target Riyadh). There are only two satellites, so asking for three or more creates a scheduling conflict: the extra missions wait in the queue until a satellite finishes.</p>
+      <input type="range" id="mc" min="1" max="5" step="1">
+    </div>
+    <div class="row">
+      <div class="lab">Priorities <button class="info" data-h="h-pr" aria-label="About priorities">i</button><span style="margin-inline-start:auto;font-size:11px">click to cycle</span></div>
+      <p class="help" id="h-pr">The order in which the Coordinator hands out missions: High first, then Medium, then Low. When satellites are scarce, the low-priority missions are the ones left waiting.</p>
+      <div class="pris" id="pris"></div>
+    </div>
+  </div>
+
+  <button class="run" id="run">▶ Run simulation</button>
+  <p class="hint"><kbd>Space</kbd> play / pause · <kbd>←</kbd> <kbd>→</kbd> step</p>
+</aside>
+
+<div class="main">
+  <div class="card stage">
+    <div>
+      <h3>Orbit view <small>Click a satellite</small></h3>
+      <div class="orbw"><svg id="orb" viewBox="0 0 400 400" role="img" aria-label="Satellites orbiting Earth"></svg><div id="sinfo"></div></div>
+      <div class="legend"><span><i style="background:var(--teal)"></i>Available</span><span><i style="background:var(--gold)"></i>Busy</span><span><i style="background:var(--coral)"></i>Fault</span><span><i style="background:linear-gradient(var(--gold),transparent)"></i>Imaging beam</span></div>
+    </div>
+    <div class="side">
+      <div class="kp">
+        <div class="ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" style="stroke:var(--dim)" stroke-width="9"/><circle id="rg" cx="50" cy="50" r="40" fill="none" stroke="url(#rgg)" stroke-width="9" stroke-linecap="round" stroke-dasharray="251.3" stroke-dashoffset="251.3" transform="rotate(-90 50 50)" style="transition:stroke-dashoffset .4s"/><defs><linearGradient id="rgg"><stop offset="0" stop-color="#3fe0c5"/><stop offset="1" stop-color="#9b8cff"/></linearGradient></defs><text id="rgt" x="50" y="50" text-anchor="middle" style="fill:var(--tx)" font-size="18" font-weight="800" font-family="Sora">0%</text><text id="rgs" x="50" y="66" text-anchor="middle" style="fill:var(--mu)" font-size="9" font-family="Sora">0/0 done</text></svg></div>
+        <div class="k"><b id="k-step">0</b><span>Simulation step</span></div>
+        <div class="k"><b id="k-conf">0</b><span>Scheduling conflicts</span></div>
+        <div class="k"><b id="k-re">0</b><span>Reassignments</span></div>
+        <div class="k"><b id="k-gs">0</b><span>Ground updates</span></div>
+      </div>
+      <div class="now"><small>Now happening</small><span id="stg">Pick a scenario or set the inputs, then run.</span></div>
+      <div class="verdict" id="vd">No run yet.</div>
+      <div class="tl">
+        <div class="ctrl">
+          <button id="back" aria-label="Previous step">⏮</button>
+          <button id="pp" aria-label="Play or pause">▶</button>
+          <button id="fwd" aria-label="Next step">⏭</button>
+          <div class="seg" id="spd"><button data-v=".5">½×</button><button data-v="1" class="on">1×</button><button data-v="2">2×</button><button data-v="4">4×</button></div>
+        </div>
+        <div class="track" id="track"></div>
+        <input id="sl" type="range" min="0" max="0" value="0" aria-label="Simulation step">
+        <div class="legend"><span><i style="background:var(--coral)"></i>Fault</span><span><i style="background:var(--gold)"></i>Conflict</span><span><i style="background:var(--pink)"></i>Reassigned</span><span><i style="background:var(--teal)"></i>Completed</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Agent network <small>Each dot is an ACL message in flight</small></h3>
+    <svg id="net" viewBox="0 0 640 280" role="img" aria-label="Agent network with messages"></svg>
+    <div class="ticker" id="ticker"></div>
+  </div>
+
+  <div class="two">
+    <div class="card"><h3>Missions</h3><div class="sc-x mis" id="mt"></div></div>
+    <div class="card"><h3>Event log</h3><div class="sc-x" id="evw"><pre id="ev"></pre></div></div>
+  </div>
+
+  <div class="card">
+    <h3>ACL message log <small id="mcount"></small></h3>
+    <div class="filt" id="filt"></div>
+    <div class="sc-x" style="max-height:340px"><table id="msg"></table></div>
+  </div>
+</div>
+</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const NS="http://www.w3.org/2000/svg";
+
+// ===== Simulation: JS port of the MADAR agents (Satellite, Battery, Mission, Comms, Coordinator, Ground Station)
+function simulate(o){const {b1,b2,th,pri:PR,d1,d2,l1,l2}=o,DR={"SAT-1":d1,"SAT-2":d2},LD={"SAT-1":l1,"SAT-2":l2},LB=[],CL=[];
+const E={step:0,ev:[],msgs:[],comm:{},ms:{},q:[],as:{},conf:[],re:[],gsu:[]},fr=[],sats={};
+[["SAT-1","Riyadh",b1],["SAT-2","Jeddah",b2]].forEach(([id,loc,b])=>{sats[id]={id,loc,bat:b,vis:["Riyadh","Jeddah"],av:true,st:"Available",m:null,plan:[]};E.comm[id]="Connected";E.ev.push(id+" added to the environment")});
+const S=()=>Object.values(sats),M=()=>Object.values(E.ms);
+const msg=(f,t,p,c)=>E.msgs.push({id:E.msgs.length+1,f,t,p,c:JSON.stringify(c)});
+const ok=(s,m)=>s.av&&s.st==="Available"&&s.bat>=30&&s.vis.includes(m.loc);
+const owner=id=>(S().find(s=>s.m&&s.m.id===id)||{}).id||null;
+const gs=(id,sid,st)=>{msg("SatelliteAgent-"+sid,"GroundStationAgent","INFORM",{mission_id:id,status:st});E.gsu.push(id)};
+const cap=stage=>{E.ev.push(`[Step ${E.step}] ${stage}`);fr.push(JSON.parse(JSON.stringify({step:E.step,stage,sats:S().map(s=>({id:s.id,bat:s.bat,st:s.st,link:E.comm[s.id],m:s.m&&s.m.id,plan:s.plan})),ms:M().map(m=>({...m,sat:owner(m.id)})),msgs:E.msgs,ev:E.ev.slice(-40),conf:E.conf.length,re:new Set(E.re).size,done:M().filter(m=>m.status==="Completed").length,total:M().length,gs:E.gsu.length})))};
+function assign(id){const m=E.ms[id],P=[];
+msg("CoordinatorAgent","MissionAgent","REQUEST",{mission_id:id});
+S().forEach(s=>{msg("CoordinatorAgent","SatelliteAgent-"+s.id,"CFP",{mission_id:id,target:m.loc,priority:m.pri});
+if(E.comm[s.id]==="Connected"&&s.bat>=th&&ok(s,m)){P.push(s);msg("SatelliteAgent-"+s.id,"CoordinatorAgent","PROPOSE",{battery:s.bat})}
+else msg("SatelliteAgent-"+s.id,"CoordinatorAgent","REFUSE",{reason:"Unavailable or unsuitable"})});
+if(!P.length){const b=S().find(s=>s.m&&s.vis.includes(m.loc));if(b&&!E.conf.some(c=>c.id===id))E.conf.push({id,sid:b.id});E.as[id]="Pending";return false}
+const s=P.reduce((a,b)=>b.bat>a.bat?b:a);
+s.plan=["Prepare satellite",...(s.loc!==m.loc?["Adjust observation to "+m.loc]:[]),"Observe "+m.loc,...(m.pri==="High"?["Prioritize data transmission"]:[]),"Send mission results"];
+s.m=m;s.av=false;s.st="Busy";m.status="Assigned";E.as[id]="Assigned";
+msg("CoordinatorAgent","SatelliteAgent-"+s.id,"ACCEPT_PROPOSAL",{mission_id:id,satellite_id:s.id});
+P.filter(x=>x!==s).forEach(x=>msg("CoordinatorAgent","SatelliteAgent-"+x.id,"REJECT_PROPOSAL",{mission_id:id,satellite_id:x.id,reason:"Another satellite was selected (higher battery)"}));gs(id,s.id,"Assigned");return true}
+function pending(){const r={High:0,Medium:1,Low:2};E.q.filter(i=>E.ms[i].status==="Pending").sort((a,b)=>r[E.ms[a].pri]-r[E.ms[b].pri]).forEach(assign)}
+function reassign(sid){const s=sats[sid];if(!s.m)return;const id=s.m.id;s.m=null;s.av=false;
+msg("CoordinatorAgent","MissionAgent","INFORM",{mission_id:id,event:"MISSION_REASSIGNMENT_REQUIRED",failed:sid});
+if(assign(id)){E.ms[id].status="Reassigned";E.re.push(id);gs(id,owner(id),"Reassigned")}else E.ms[id].status="Pending"}
+function alerts(){const A=[];
+S().forEach(s=>{if(s.st!=="Low Battery"&&s.bat<th){s.st="Low Battery";LB.push(s.id);msg("BatteryAgent","CoordinatorAgent","INFORM",{type:"LOW_BATTERY",satellite_id:s.id});A.push(s.id)}});
+S().forEach(s=>{if(E.comm[s.id]!=="Connected"&&s.st!=="Connection Lost"){s.st="Connection Lost";CL.push(s.id);msg("CommunicationAgent","CoordinatorAgent","INFORM",{event:"CONNECTION_LOST",satellite_id:s.id});A.push(s.id)}});
+A.forEach(reassign)}
+function exec(s){if(!s.m)return"No mission assigned";if(["Low Battery","Connection Lost"].includes(s.st))return"Mission paused: "+s.st;
+if(s.plan.length)return s.plan.shift();const id=s.m.id;s.m=null;s.plan=[];s.av=true;s.st="Available";return`Mission ${id} completed`}
+const list=PR.map((p,i)=>["M00"+(i+1),p]);
+list.forEach(([id,pri])=>{E.ms[id]={id,loc:"Riyadh",pri,win:"10:00-12:00",status:"Pending"};E.q.push(id);E.as[id]="Pending";msg("MissionAgent","CoordinatorAgent","INFORM",{mission_id:id,priority:pri})});
+cap("Mission requests received");
+S().forEach(s=>{if(LD[s.id]<0){E.comm[s.id]="Disconnected";E.ev.push(s.id+" starts disconnected")}});
+alerts();pending();cap("Initial checks and allocation completed");
+const tick=()=>{S().forEach(s=>{if(s.m&&DR[s.id])s.bat=Math.max(0,s.bat-DR[s.id]);const L=LD[s.id];if(L>0&&E.step>=L&&E.comm[s.id]==="Connected"){E.comm[s.id]="Disconnected";E.ev.push(s.id+" communication status changed to Disconnected")}});alerts()};
+for(let i=0;i<100;i++){let act=S().filter(s=>s.m);const pend=()=>M().some(m=>m.status==="Pending");
+if(!act.length&&!pend())break;
+if(!act.length){pending();act=S().filter(s=>s.m);if(!act.length){cap("No eligible satellite: remaining missions stay pending");break}}
+for(const s of act){if(!s.m)continue;const id=s.m.id;if(E.ms[id].status!=="In Progress"){E.ms[id].status="In Progress";gs(id,s.id,"In Progress")}
+const a=exec(s);E.step++;E.ev.push(`${s.id} | ${id} | ${a}`);
+if(!s.m&&a===`Mission ${id} completed`){E.ms[id].status="Completed";gs(id,s.id,"Completed")}tick();cap(`${s.id}: ${a}`)}
+if(pend()&&S().some(s=>s.av)){pending();cap("Attempted allocation of waiting missions")}}
+const t=M().length,d=M().filter(m=>m.status==="Completed").length,rs=new Set(E.re).size,N=[],u=a=>[...new Set(a)].join(", ");
+if(LB.length)N.push("Low battery: "+u(LB));if(CL.length)N.push("Link lost: "+u(CL));
+if(E.conf.length)N.push("Scheduling conflict: "+u(E.conf.map(c=>c.id)));if(rs)N.push("Reassigned: "+u(E.re));
+if(t-d)N.push((t-d)+" mission(s) without an eligible satellite");if(!N.length)N.push("No faults detected");
+cap("FINAL RESULT: "+d+"/"+t+" missions completed");
+fr.final={all:d===t,left:t-d,notes:N};return fr}
+
+// ===== Inputs
+const PRESETS={
+  "Normal":{b1:90,b2:80,th:30,d1:0,d2:0,l1:0,l2:0,pri:["High"]},
+  "Battery drain":{b1:90,b2:80,th:30,d1:20,d2:0,l1:0,l2:0,pri:["High"]},
+  "Link loss":{b1:90,b2:80,th:30,d1:0,d2:0,l1:3,l2:0,pri:["High"]},
+  "Conflict":{b1:90,b2:80,th:30,d1:0,d2:0,l1:0,l2:0,pri:["Low","High","Medium"]},
+  "Stress test":{b1:70,b2:60,th:40,d1:4,d2:6,l1:0,l2:5,pri:["High","Medium","Low","High","Low"]},
+  "Total blackout":{b1:90,b2:80,th:30,d1:0,d2:0,l1:-1,l2:1,pri:["High","Low"]}
+};
+let st=JSON.parse(JSON.stringify(PRESETS.Normal)),activePreset="Normal";
+const LINKS=[["0","Stable"],["-1","Off"],["1","Drop @1"],["3","Drop @3"],["5","Drop @5"]];
+$("satins").innerHTML=[1,2].map(n=>`
+<div class="satin">
+  <header><b>SAT-${n}</b><span style="color:var(--mu);font-size:12px">${n===1?"Riyadh":"Jeddah"} · sees Riyadh &amp; Jeddah</span><div class="batt"><i id="bi${n}"></i></div></header>
+  <div class="row"><div class="lab">Starting battery <button class="info" data-h="h-b${n}" aria-label="About starting battery">i</button><output id="o-b${n}"></output></div>
+  <p class="help" id="h-b${n}">How charged SAT-${n} is when the simulation starts. When several satellites can take a mission, the Coordinator picks the one with the highest battery. If this starts below the threshold, SAT-${n} refuses every mission (REFUSE) from the first round.</p>
+  <input type="range" id="b${n}" min="0" max="100" step="5"></div>
+  <div class="row"><div class="lab">Drain per step <button class="info" data-h="h-d${n}" aria-label="About battery drain">i</button><output id="o-d${n}"></output></div>
+  <p class="help" id="h-d${n}">How much battery SAT-${n} burns on each step while it is working on a mission (idle satellites don't drain). Use it to make a satellite run out of power mid-mission: the Battery Agent spots it, and the mission is handed to another satellite.</p>
+  <input type="range" id="d${n}" min="0" max="25" step="1"></div>
+  <div class="row"><div class="lab">Ground link <button class="info" data-h="h-l${n}" aria-label="About ground link">i</button></div>
+  <p class="help" id="h-l${n}">When SAT-${n} loses contact with the ground. <b>Stable</b> never drops. <b>Off</b> is disconnected from the start, so it can't take any mission. <b>Drop @N</b> loses the link at step N: the Communication Agent raises CONNECTION_LOST and the Coordinator reassigns its mission.</p>
+  <div class="seg" data-k="l${n}">${LINKS.map(([v,l])=>`<button data-v="${v}">${l}</button>`).join("")}</div></div>
+</div>`).join("");
+$("presets").innerHTML=Object.keys(PRESETS).map(k=>`<button class="preset" data-k="${k}">${k}</button>`).join("");
+
+function syncUI(){
+  ["b1","b2","th","d1","d2"].forEach(k=>{$(k).value=st[k];$("o-"+k).textContent=st[k]+"%"});
+  $("mc").value=st.pri.length;$("o-mc").textContent=st.pri.length;
+  [1,2].forEach(n=>{const b=st["b"+n],i=$("bi"+n);i.style.width=`calc(${b}% - 4px)`;i.style.background=b<st.th?"var(--coral)":b<st.th+20?"var(--gold)":"var(--teal)"});
+  document.querySelectorAll(".seg[data-k]").forEach(s=>s.querySelectorAll("button").forEach(b=>{const on=+b.dataset.v===st[s.dataset.k];b.classList.toggle("on",on);b.classList.toggle("bad",on&&b.dataset.v!=="0")}));
+  $("pris").innerHTML=st.pri.map((p,i)=>`<button class="pri" data-i="${i}" data-p="${p}"><small>M00${i+1}</small>${p}</button>`).join("");
+  document.querySelectorAll(".preset").forEach(b=>b.classList.toggle("on",b.dataset.k===activePreset));
+}
+const touched=()=>{activePreset=null;syncUI()};
+["b1","b2","th","d1","d2"].forEach(k=>$(k).oninput=()=>{st[k]=+$(k).value;touched()});
+$("mc").oninput=()=>{const n=+$("mc").value;st.pri=Array.from({length:n},(_,i)=>st.pri[i]||"High");touched()};
+document.addEventListener("click",e=>{
+  const sg=e.target.closest(".seg[data-k] button");if(sg){st[sg.parentNode.dataset.k]=+sg.dataset.v;touched();return}
+  const pr=e.target.closest(".pri");if(pr){const c=["High","Medium","Low"];st.pri[+pr.dataset.i]=c[(c.indexOf(st.pri[+pr.dataset.i])+1)%3];touched();return}
+  const ps=e.target.closest(".preset");if(ps){st=JSON.parse(JSON.stringify(PRESETS[ps.dataset.k]));activePreset=ps.dataset.k;syncUI();runSim();return}
+  const inf=e.target.closest(".info");if(inf){$(inf.dataset.h).classList.toggle("show");inf.classList.toggle("on");return}
+});
+syncUI();
+
+// ===== Theme toggle
+let lightTheme=false;
+function setTheme(l){lightTheme=l;document.documentElement.dataset.theme=l?"light":"dark";$("theme").textContent=l?"🌙":"☀️";try{localStorage.setItem("madar-theme",l?"light":"dark")}catch(e){}}
+try{setTheme(localStorage.getItem("madar-theme")==="light")}catch(e){setTheme(false)}
+$("theme").onclick=()=>setTheme(!lightTheme);
+
+// ===== Starfield
+const sky=$("sky"),cx=sky.getContext("2d");let stars=[];
+function sizeSky(){sky.width=innerWidth*devicePixelRatio;sky.height=innerHeight*devicePixelRatio;stars=Array.from({length:Math.round(innerWidth*innerHeight/5000)},()=>({x:Math.random()*sky.width,y:Math.random()*sky.height,r:Math.random()*1.3+.2,p:Math.random()*6.28,s:Math.random()*.02+.005}))}
+sizeSky();addEventListener("resize",sizeSky);
+function drawSky(t){cx.clearRect(0,0,sky.width,sky.height);stars.forEach(s=>{s.x-=s.s*devicePixelRatio;if(s.x<0)s.x=sky.width;cx.globalAlpha=.25+.55*Math.abs(Math.sin(s.p+t/1400));cx.fillStyle=lightTheme?"#5a46d6":"#fff";cx.beginPath();cx.arc(s.x,s.y,s.r*devicePixelRatio,0,6.283);cx.fill()})}
+
+// ===== Orbit SVG
+const C0=200,ER=76,R=[128,170],W=[.22,.15],ang=[.6,3.4],pos=[[0,0],[0,0]];
+const GS=[200,124],RY=[222,196],JD=[174,214];
+const el=(tag,attrs,parent)=>{const n=document.createElementNS(NS,tag);for(const k in attrs)n.setAttribute(k,attrs[k]);if(parent)parent.appendChild(n);return n};
+const orb=$("orb");
+orb.innerHTML=`<defs>
+<radialGradient id="eg" cx=".35" cy=".3"><stop offset="0" stop-color="#8ff0ff"/><stop offset=".5" stop-color="#2a6fd6"/><stop offset="1" stop-color="#120f3d"/></radialGradient>
+<radialGradient id="atm"><stop offset=".85" stop-color="#3fe0c5" stop-opacity="0"/><stop offset="1" stop-color="#3fe0c5" stop-opacity=".35"/></radialGradient>
+<linearGradient id="beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f2b84b" stop-opacity=".9"/><stop offset="1" stop-color="#f2b84b" stop-opacity=".05"/></linearGradient>
+<filter id="glow"><feGaussianBlur stdDeviation="3"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<clipPath id="ec"><circle cx="200" cy="200" r="76"/></clipPath></defs>`;
+R.forEach(r=>el("circle",{cx:C0,cy:C0,r,fill:"none",stroke:"rgba(255,255,255,.14)","stroke-dasharray":"2 7"},orb));
+el("circle",{cx:C0,cy:C0,r:ER+10,fill:"url(#atm)"},orb);
+el("circle",{cx:C0,cy:C0,r:ER,fill:"url(#eg)"},orb);
+const mer=el("g",{"clip-path":"url(#ec)",stroke:"rgba(255,255,255,.16)",fill:"none"},orb);
+const merE=[0,1,2,3].map(()=>el("ellipse",{cx:C0,cy:C0,rx:ER,ry:ER},mer));
+[-40,0,40].forEach(dy=>el("ellipse",{cx:C0,cy:C0+dy,rx:Math.sqrt(ER*ER-dy*dy),ry:6},mer));
+const cityG=el("g",{},orb);
+[[RY,"Riyadh","#f2b84b",8],[JD,"Jeddah","#ff9d5c",-46]].forEach(([p,n,c,dx])=>{el("circle",{cx:p[0],cy:p[1],r:4,fill:c,filter:"url(#glow)"},cityG);el("text",{x:p[0]+dx,y:p[1]+3,fill:"#fff","font-size":9,"font-family":"Sora"},cityG).textContent=n});
+el("rect",{x:GS[0]-5,y:GS[1]-5,width:10,height:10,rx:2,fill:"#9b8cff",transform:`rotate(45 ${GS[0]} ${GS[1]})`},orb);
+el("text",{x:GS[0],y:GS[1]-10,fill:"#cfc8ff","font-size":9,"text-anchor":"middle","font-family":"Sora"},orb).textContent="GS-1";
+const beams=[0,1].map(()=>el("polygon",{fill:"url(#beam)",opacity:0},orb));
+const links=[0,1].map(()=>el("line",{"stroke-width":1.4,"stroke-dasharray":"4 8",class:"flow"},orb));
+const cuts=[0,1].map(()=>{const t=el("text",{fill:"#ff6f7d","font-size":14,"font-weight":800,"text-anchor":"middle",opacity:0},orb);t.textContent="✕";return t});
+const fx=el("g",{},orb);
+const satG=[0,1].map(i=>{const g=el("g",{class:"satg",tabindex:0,role:"button","aria-label":"SAT-"+(i+1)},orb);
+  const halo=el("circle",{r:22,opacity:.16},g);
+  const arcBg=el("circle",{r:22,fill:"none",stroke:"rgba(255,255,255,.12)","stroke-width":3},g);
+  const arc=el("circle",{r:22,fill:"none","stroke-width":3,"stroke-linecap":"round",transform:"rotate(-90)"},g);
+  el("rect",{x:-17,y:-4,width:10,height:8,rx:1,fill:"#5aa8ff",opacity:.9},g);el("rect",{x:7,y:-4,width:10,height:8,rx:1,fill:"#5aa8ff",opacity:.9},g);
+  const body=el("rect",{x:-6,y:-6,width:12,height:12,rx:3},g);
+  const lab=el("text",{y:-28,"text-anchor":"middle",fill:"#fff","font-size":10,"font-weight":700,"font-family":"Sora"},g);lab.textContent="SAT-"+(i+1);
+  const sub=el("text",{y:36,"text-anchor":"middle","font-size":9.5,"font-family":"JetBrains Mono"},g);
+  g.addEventListener("click",e=>{e.stopPropagation();sel=sel===i?null:i;showInfo()});
+  g.addEventListener("keydown",e=>{if(e.key==="Enter"){sel=sel===i?null:i;showInfo()}});
+  return {g,halo,arc,body,sub}});
+orb.addEventListener("click",()=>{sel=null;showInfo()});
+let sel=null;
+
+function pulse(x,y,c){if(reduce)return;const p=el("circle",{cx:x,cy:y,r:14,fill:"none",stroke:c,"stroke-width":2,class:"pulse"},fx);setTimeout(()=>p.remove(),1400)}
+const satColor=s=>s.st==="Available"?"#3fe0c5":s.st==="Busy"?"#f2b84b":"#ff6f7d";
+
+// ===== Network SVG
+const NODES={MissionAgent:[80,50,"Mission","M"],BatteryAgent:[80,140,"Battery","B"],CommunicationAgent:[80,230,"Comms","C"],CoordinatorAgent:[310,110,"Coordinator","★"],GroundStationAgent:[310,230,"Ground GS-1","G"],"SatelliteAgent-SAT-1":[550,60,"SAT-1","1"],"SatelliteAgent-SAT-2":[550,180,"SAT-2","2"]};
+const EDGES=[["MissionAgent","CoordinatorAgent"],["BatteryAgent","CoordinatorAgent"],["CommunicationAgent","CoordinatorAgent"],["CoordinatorAgent","SatelliteAgent-SAT-1"],["CoordinatorAgent","SatelliteAgent-SAT-2"],["SatelliteAgent-SAT-1","GroundStationAgent"],["SatelliteAgent-SAT-2","GroundStationAgent"]];
+const PC={CFP:"#f2b84b",REQUEST:"#f2b84b",PROPOSE:"#3fe0c5",ACCEPT_PROPOSAL:"#3fe0c5",INFORM:"#9b8cff",REFUSE:"#ff6f7d",REJECT_PROPOSAL:"#ff6f7d"};
+const net=$("net");
+EDGES.forEach(([a,b])=>el("line",{x1:NODES[a][0],y1:NODES[a][1],x2:NODES[b][0],y2:NODES[b][1],style:"stroke:var(--dim)","stroke-width":1.5},net));
+const pkG=el("g",{},net);
+const NV={};
+for(const k in NODES){const [x,y,n,g]=NODES[k],grp=el("g",{},net);
+  const glow=el("circle",{cx:x,cy:y,r:22,fill:"none","stroke-width":2,opacity:0},grp);
+  const ring=el("circle",{cx:x,cy:y,r:20,style:"fill:var(--nodebg)","stroke-width":2.5},grp);
+  el("text",{x,y:y+5,"text-anchor":"middle",style:"fill:var(--tx)","font-size":14,"font-weight":800,"font-family":"Sora"},grp).textContent=g;
+  el("text",{x,y:y+34,"text-anchor":"middle",style:"fill:var(--tx)","font-size":11,"font-weight":700,"font-family":"Sora"},grp).textContent=n;
+  const s=el("text",{x,y:y+47,"text-anchor":"middle","font-size":9.5,"font-family":"JetBrains Mono"},grp);
+  NV[k]={glow,ring,s,hit:-1e9}}
+let PK=[];
+
+// ===== Playback state
+let F=[],cur=-1,timer=null,playing=false,spd=1,cfgTh=30,mfilter="All";
+const interval=()=>420/spd;
+
+function spawnPackets(msgs,now){const L=msgs.slice(-12),gap=Math.min(110,interval()*.7/Math.max(1,L.length));
+  L.forEach((m,k)=>{const a=NODES[m.f],b=NODES[m.t];if(a&&b)PK.push({a,b,t0:now+k*gap,dur:Math.min(650,interval()*.9),c:PC[m.p]||"#fff",to:m.t})})}
+
+function render(i,animate){const f=F[i];if(!f)return;const prev=F[cur];const step=animate&&prev&&i===cur+1;cur=i;
+  const now=performance.now(),last=i===F.length-1,fin=F.final;
+  $("sl").value=i;$("stg").textContent=`Step ${f.step} · ${f.stage}`;
+  // KPIs
+  const rate=f.total?Math.round(100*f.done/f.total):0;
+  $("rg").style.strokeDashoffset=251.3*(1-rate/100);$("rgt").textContent=rate+"%";$("rgs").textContent=`${f.done}/${f.total} done`;
+  [["k-step",f.step],["k-conf",f.conf],["k-re",f.re],["k-gs",f.gs]].forEach(([id,v])=>{const e=$(id);if(e.textContent!==String(v)){e.textContent=v;if(step&&id!=="k-step"){e.classList.remove("bump");void e.offsetWidth;e.classList.add("bump")}}});
+  $("vd").className="verdict"+(last?(fin.all?" pass":" fail"):"");
+  $("vd").innerHTML=last?`<b>${fin.all?"✅ All missions completed":"⚠️ "+fin.left+" mission(s) not completed"}</b><br>${fin.notes.join(" · ")}`:"Simulation running…";
+  // Orbit effects on change
+  if(step){f.sats.forEach((s,k)=>{const p=prev.sats[k];if(s.st!==p.st&&!["Available","Busy"].includes(s.st))pulse(pos[k][0],pos[k][1],"#ff6f7d");if(s.link!==p.link)pulse(pos[k][0],pos[k][1],"#ff6f7d")});
+    if(f.done>prev.done)pulse(RY[0],RY[1],"#3fe0c5");if(f.re>prev.re)f.sats.forEach((s,k)=>{if(s.m)pulse(pos[k][0],pos[k][1],"#ff9bd0")});
+    spawnPackets(f.msgs.slice(prev.msgs.length),now)}
+  showInfo();
+  // Network node statuses
+  const low=f.sats.filter(s=>s.bat<cfgTh||s.st==="Low Battery"),dis=f.sats.filter(s=>s.link!=="Connected"),pe=f.ms.filter(m=>m.status==="Pending").length;
+  const NS_={MissionAgent:[`${f.total} req · ${pe} pending`,"var(--vio)"],BatteryAgent:[low.length?"LOW: "+low.map(s=>s.id).join(","):"Monitoring",low.length?"var(--coral)":"var(--vio)"],CommunicationAgent:[dis.length?"DOWN: "+dis.map(s=>s.id).join(","):"Monitoring",dis.length?"var(--coral)":"var(--vio)"],CoordinatorAgent:[`conflicts ${f.conf} · reassign ${f.re}`,"var(--gold)"],GroundStationAgent:[`${f.gs} updates`,"var(--vio)"]};
+  f.sats.forEach(s=>NS_["SatelliteAgent-"+s.id]=[`${s.st} · ${s.bat}%`,s.st==="Available"?"var(--teal)":s.st==="Busy"?"var(--gold)":"var(--coral)"]);
+  for(const k in NV){NV[k].s.textContent=NS_[k][0];NV[k].s.style.fill=NS_[k][1];NV[k].ring.style.stroke=NS_[k][1];NV[k].glow.style.stroke=NS_[k][1]}
+  $("ticker").innerHTML=f.msgs.slice(-3).reverse().map(m=>`<div><span class="pill p-${m.p}">${m.p}</span> ${esc(m.f)} → ${esc(m.t)}</div>`).join("");
+  // Missions
+  const stIdx={Pending:0,Assigned:1,Reassigned:1,"In Progress":2,Completed:3};
+  $("mt").innerHTML=f.ms.map(m=>{const n=stIdx[m.status];let p="";for(let j=0;j<4;j++){p+=`<span class="${j<=n?"lit":""}"></span>`;if(j<3)p+=`<em class="${j<n?"lit":""}"></em>`}
+    return `<div class="mi"><div><b>${m.id}</b><div class="pr-${m.pri}" style="font-size:11px;font-weight:700">${m.pri}</div></div><div><div class="pipe">${p}</div><div class="lbls"><span>Queued</span><span>Assigned</span><span>Running</span><span>Done</span></div></div><div style="text-align:end"><span class="pill p-${m.status.replace(" ",".")}">${m.status}</span><div style="font-size:11px;color:var(--mu);margin-top:4px">${m.sat||"—"}</div></div></div>`}).join("");
+  // Event log
+  $("ev").innerHTML=f.ev.map(l=>{const c=/Disconnected|Low Battery|Connection Lost|paused|No eligible/.test(l)?"bad":/completed|FINAL/.test(l)?"good":/^\[Step/.test(l)?"stp":"";return `<span class="${c}">${esc(l)}</span>`}).join("\n");$("evw").scrollTop=1e5;
+  renderMsgs(step?prev.msgs.length:Infinity);
+  document.querySelectorAll(".mk").forEach(m=>m.style.transform=`translateX(-50%) scale(${+m.dataset.i===i?1.5:1})`);
+}
+function renderMsgs(newFrom=Infinity){const f=F[cur];if(!f)return;const L=f.msgs.filter(m=>mfilter==="All"||m.p===mfilter);
+  $("mcount").textContent=`${f.msgs.length} messages`;
+  $("msg").innerHTML="<tr><th>#</th><th>From → To</th><th>Type</th><th>Content</th></tr>"+L.slice(-40).reverse().map(m=>`<tr class="${m.id>newFrom?"new":""}"><td>${m.id}</td><td>${esc(m.f)} → ${esc(m.t)}</td><td><span class="pill p-${m.p}">${m.p}</span></td><td class="c">${esc(m.c)}</td></tr>`).join("")}
+$("filt").innerHTML=["All","CFP","PROPOSE","REFUSE","ACCEPT_PROPOSAL","REJECT_PROPOSAL","INFORM","REQUEST"].map(p=>`<button class="p-${p}${p==="All"?" on":""}" data-p="${p}">${p}</button>`).join("");
+$("filt").onclick=e=>{const b=e.target.closest("button");if(!b)return;mfilter=b.dataset.p;$("filt").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));renderMsgs()};
+const esc=s=>String(s).replace(/[&<>]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;"}[c]));
+
+function showInfo(){const box=$("sinfo");const f=F[cur];if(sel===null||!f){box.style.display="none";return}
+  const s=f.sats[sel];box.style.display="block";
+  box.innerHTML=`<b>${s.id}</b> · <span style="color:${satColor(s)}">${s.st}</span><br>Battery ${s.bat}% · Link ${s.link}<br>Mission: ${s.m||"none"}${s.m&&s.plan&&s.plan.length?`<br><span style="color:var(--mu)">Next: ${esc(s.plan[0])}</span>`:""}`}
+
+function markers(){const T=$("track");T.innerHTML="";const n=F.length-1;if(n<1)return;
+  for(let i=1;i<=n;i++){const a=F[i],b=F[i-1];let c=null,why="";
+    if(a.sats.some((s,k)=>s.st!==b.sats[k].st&&!["Available","Busy"].includes(s.st))){c="var(--coral)";why="Fault detected"}
+    else if(a.re>b.re){c="var(--pink)";why="Mission reassigned"}
+    else if(a.conf>b.conf){c="var(--gold)";why="Scheduling conflict"}
+    else if(a.done>b.done){c="var(--teal)";why="Mission completed"}
+    if(c){const m=document.createElement("button");m.className="mk";m.dataset.i=i;m.style.left=(100*i/n)+"%";m.style.background=c;m.style.color=c;m.title=`Step ${a.step}: ${why}`;m.setAttribute("aria-label",m.title);m.onclick=()=>{pause();render(i)};T.appendChild(m)}}}
+
+// ===== Controls
+function pause(){clearInterval(timer);playing=false;$("pp").textContent="▶"}
+function play(){if(cur>=F.length-1)render(0);clearInterval(timer);playing=true;$("pp").textContent="⏸";
+  timer=setInterval(()=>{if(cur>=F.length-1){pause();$("pp").textContent="↻";return}render(cur+1,true)},interval())}
+let BACKEND=null,runId=0;
+async function runSim(){cfgTh=st.th;const my=++runId;
+  try{
+    if(BACKEND){pause();$("vd").className="verdict";$("vd").textContent="Running the Python agents… (traced in LangSmith)";
+      const r=await fetch("./api/run",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({...st,pri:[...st.pri]})});
+      const data=await r.json();if(!r.ok)throw new Error(data.error||JSON.stringify(data.detail)||r.status);
+      if(my!==runId)return;
+      F=data.frames;F.forEach(f=>f.msgs=data.msgs.slice(0,f.mc));F.final=data.final;
+    }else F=simulate({...st,pri:[...st.pri]});
+  }catch(e){$("vd").className="verdict fail";$("vd").textContent="Error: "+e.message;return}
+  $("sl").max=F.length-1;cur=-1;PK=[];sel=null;render(0);markers();play()}
+$("run").onclick=runSim;
+$("pp").onclick=()=>playing?pause():play();
+$("back").onclick=()=>{pause();if(cur>0)render(cur-1)};
+$("fwd").onclick=()=>{pause();if(cur<F.length-1)render(cur+1,true)};
+$("sl").oninput=()=>{pause();const v=+$("sl").value;render(v,v===cur+1)};
+$("spd").onclick=e=>{const b=e.target.closest("button");if(!b)return;spd=+b.dataset.v;$("spd").querySelectorAll("button").forEach(x=>x.classList.toggle("on",x===b));if(playing)play()};
+addEventListener("keydown",e=>{if(/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)&&e.target.type!=="range")return;
+  if(e.code==="Space"&&e.target.tagName!=="BUTTON"){e.preventDefault();playing?pause():play()}
+  else if(e.key==="ArrowRight"&&e.target.type!=="range"){pause();if(cur<F.length-1)render(cur+1,true)}
+  else if(e.key==="ArrowLeft"&&e.target.type!=="range"){pause();if(cur>0)render(cur-1)}});
+
+// ===== Animation loop
+let lastT=performance.now();
+function loop(t){const dt=Math.min(.05,(t-lastT)/1000);lastT=t;
+  if(!reduce){drawSky(t);ang[0]+=dt*W[0]*spd;ang[1]+=dt*W[1]*spd}
+  merE.forEach((m,k)=>m.setAttribute("rx",Math.abs(ER*Math.cos(t*.00025+k*Math.PI/4))));
+  const f=F[cur];const sm=f&&f.stage.match(/^(SAT-\d): (.*)$/);
+  [0,1].forEach(i=>{const x=C0+R[i]*Math.cos(ang[i]),y=C0+R[i]*Math.sin(ang[i]);pos[i]=[x,y];
+    const s=f?f.sats[i]:{id:"SAT-"+(i+1),bat:st["b"+(i+1)],st:"Available",link:"Connected"},c=satColor(s),V=satG[i];
+    V.g.setAttribute("transform",`translate(${x} ${y})`);V.halo.setAttribute("fill",c);V.body.setAttribute("fill",c);
+    V.halo.setAttribute("r",22+(sel===i?4+2*Math.sin(t/200):0));
+    V.arc.setAttribute("stroke",c);V.arc.setAttribute("stroke-dasharray",`${138.2*s.bat/100} 200`);
+    V.sub.setAttribute("fill",c);V.sub.textContent=`${s.bat}%${s.m?" · "+s.m:""}`;
+    const up=s.link==="Connected",L=links[i];
+    L.setAttribute("x1",x);L.setAttribute("y1",y);L.setAttribute("x2",GS[0]);L.setAttribute("y2",GS[1]);
+    L.setAttribute("stroke",up?"#3fe0c5":"#ff6f7d");L.setAttribute("opacity",up?.6:.5);L.setAttribute("stroke-dasharray",up?"4 8":"2 10");
+    const mine=sm&&sm[1]===s.id;L.classList.toggle("fast",!!(mine&&/transmission|Send/.test(sm[2])&&up));
+    cuts[i].setAttribute("x",(x+GS[0])/2);cuts[i].setAttribute("y",(y+GS[1])/2+5);cuts[i].setAttribute("opacity",up?0:1);
+    const obs=mine&&/Observe|Adjust/.test(sm[2]);
+    beams[i].setAttribute("points",`${x},${y} ${RY[0]-9},${RY[1]+4} ${RY[0]+9},${RY[1]-4}`);
+    beams[i].setAttribute("opacity",obs?.55+.3*Math.sin(t/140):0)});
+  // packets
+  let h="";PK=PK.filter(p=>{const q=(t-p.t0)/p.dur;if(q<0)return true;if(q>=1){NV[p.to]&&(NV[p.to].hit=t);return false}
+    const e=q<.5?2*q*q:1-Math.pow(-2*q+2,2)/2,x=p.a[0]+(p.b[0]-p.a[0])*e,y=p.a[1]+(p.b[1]-p.a[1])*e,e2=Math.max(0,e-.08),tx=p.a[0]+(p.b[0]-p.a[0])*e2,ty=p.a[1]+(p.b[1]-p.a[1])*e2;
+    h+=`<line x1="${tx}" y1="${ty}" x2="${x}" y2="${y}" stroke="${p.c}" stroke-width="3" stroke-linecap="round" opacity=".5"/><circle cx="${x}" cy="${y}" r="4.5" fill="${p.c}" filter="url(#ng)"/>`;return true});
+  pkG.innerHTML=h;
+  for(const k in NV){const a=Math.max(0,1-(t-NV[k].hit)/500);NV[k].glow.setAttribute("r",22+10*(1-a));NV[k].glow.setAttribute("opacity",a)}
+  requestAnimationFrame(loop)}
+el("defs",{},net).innerHTML=`<filter id="ng"><feGaussianBlur stdDeviation="2.5"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>`;
+requestAnimationFrame(loop);
+(async()=>{try{if(location.protocol.startsWith("http")){const r=await fetch("./api/health",{cache:"no-store"});if(r.ok){const h=await r.json();if(h.backend==="python")BACKEND=h}}}catch(e){}
+  const b=$("ls");
+  if(BACKEND){b.textContent=BACKEND.tracing?"LangSmith ON · "+BACKEND.project:"Python agents · tracing OFF";b.className="chip ls "+(BACKEND.tracing?"on":"warn");b.title=BACKEND.tracing?"Each run executes the Python agents and is traced in LangSmith":"Run the API-key cell in Colab to enable tracing"}
+  else{b.textContent="Browser mode · not traced";b.className="chip ls";b.title="Open this page from the Colab link to trace runs in LangSmith"}
+  runSim()})();
+</script>
+</body>
+</html>
