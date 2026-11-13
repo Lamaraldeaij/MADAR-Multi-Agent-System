@@ -26,8 +26,8 @@ Once the setup is complete, the system is ready to run. The next section explain
 After completing the setup and opening the MADAR dashboard, follow these steps:
 
 1. Select one of the available scenarios from the Quick Scenarios section, or customize the simulation settings.
-2. Adjust the satellite battery levels, battery drain, communication status, and mission priorities as needed.
-3. Click the **Run Simulation** button to start the simulation.
+2.Adjust the satellite battery levels, battery drain per step, ground link, battery threshold and mission priorities as needed.
+3.Click the Run Simulation button to start the simulation. (Choosing a Quick Scenario runs it immediately; use Run Simulation after changing the settings manually.)
 4. Monitor the simulation through the dashboard, where you can view satellite status, mission progress, agent activities, and communication messages.
 5. Use the timeline controls to play, pause, move between simulation steps, and review important events.
 6. Review the performance metrics and event logs to understand the system's results.
@@ -37,7 +37,7 @@ After completing the setup and opening the MADAR dashboard, follow these steps:
 - The system supports up to 5 missions per simulation.
 - Battery levels must be between 0% and 100%.
 - The battery threshold can be adjusted between 30% and 80%.
-- At least 3 missions are required to test scheduling conflicts.
+- With both satellites available, at least 3 missions are needed to create a scheduling conflict.
 - The dashboard supports different scenarios, including Normal, Battery Drain, Link Loss, Conflict, Stress Test, and Total Blackout.
 - Do not upload the LangSmith API key or other sensitive credentials to the public GitHub repository.
 - The `MADAR.html` file can also run independently using its built-in simulation logic, but standalone runs are not traced in LangSmith.
